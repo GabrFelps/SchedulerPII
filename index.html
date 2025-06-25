@@ -2,64 +2,51 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Scheduler: Listeta de Tarefas</title>
-
-  <!-- Horizon UI + Tailwind que o List Card precisa -->
-  <link rel="stylesheet" href="src/card.css">
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Seu CSS autoral -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diário do Cavaleiro</title>
   <link rel="stylesheet" href="src/styles.css">
 </head>
-<body class="bg-gray-50 flex flex-col items-center min-h-screen">
+<body>
+  <!-- Botão modo escuro -->
+  <button id="darkToggle" class="dark-toggle" title="Alternar modo escuro">🌙</button>
 
-  <!-- List Card -->
-  <div class="mt-8 flex flex-col items-center">
-    <div class="relative flex flex-col rounded-[20px] max-w-[300px] bg-white shadow-3xl w-full p-4">
-      <div class="flex justify-between">
-        <div class="flex items-center">
-          <div class="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-100">
-            <span class="material-symbols-rounded h-6 w-6 text-brand-500">check_circle</span>
-          </div>
-          <h4 class="ml-4 text-xl font-bold text-navy-700">Memórias</h4>
-        </div>
-      </div>
-      <div id="listaMemorias" class="divide-y"></div>
+  <!-- Cartão -->
+  <div class="card">
+    <div class="card-header">
+      <span class="icon">✔️</span>
+      <h2>Lista Teste</h2>
+    </div>
+    <div id="listaTarefas" class="card-body">
+      <!-- itens vêm do JS -->
     </div>
   </div>
 
-  <!-- Área de cadastro e tabela -->
-  <div class="container mx-auto px-4 py-10">
-    <h1 class="text-3xl font-bold text-center mb-6">Ai papai</h1>
+  <!-- Área principal -->
+  <div class="container">
+    <h1>Vai se fuder iglesio</h1>
 
-    <div id="input-section" class="mb-4 flex flex-col gap-2">
-      <label for="descricaoTarefa" class="font-medium">Escreva uma nova tarefa:</label>
-      <input id="descricaoTarefa" type="text"
-             class="border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-             placeholder="Ex: Estudar para a prova de Engenharia de Software II">
-      <label id="errorMessage" class="text-red-500 text-sm"></label>
+    <div id="input-section">
+      <label for="descricaoTarefa">Escreva uma nova tarefa:</label>
+      <input type="text" id="descricaoTarefa" placeholder="Ex: Estudar pra prova de Engenharia de Software II">
+      <label id="errorMessage"></label>
     </div>
 
-    <button id="adicionarBtn"
-            class="mb-6 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded-md">
-      Registrar Memória
-    </button>
+    <button id="adicionarBtn" class="primary-btn">Adicionar tarefa</button>
 
-    <table id="tabelaTarefas" class="w-full table-auto bg-white rounded-lg shadow-md overflow-hidden">
-      <thead class="bg-indigo-600 text-white">
+    <table id="tabelaTarefas">
+      <thead>
         <tr>
-          <th class="px-4 py-2">ID</th>
-          <th class="px-4 py-2">Descrição</th>
-          <th class="px-4 py-2">Início</th>
-          <th class="px-4 py-2">Conclusão</th>
-          <th class="px-4 py-2">Ações</th>
+          <th>ID</th>
+          <th>Descrição</th>
+          <th>Início</th>
+          <th>Conclusão</th>
+          <th>Ações</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
 
-    <div id="noTasksMessage" class="mt-4 text-center text-gray-500">Nenhuma memória registrada ainda.</div>
+    <div id="noTasksMessage">Sem tarefas adicionadas.</div>
   </div>
 
   <script src="src/script.js"></script>

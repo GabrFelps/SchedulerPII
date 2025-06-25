@@ -1,100 +1,96 @@
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f3f4f6; /* cinza claro Tailwind */
-  color: #1f2937; /* text-gray-800 */
-  margin: 0;
-  padding: 0;
+/* ---------- cores base ---------- */
+:root {
+  --bg: #f3f4f6;
+  --text: #1f2937;
+  --card-bg: #ffffff;
+  --primary: #4f46e5;
+  --header-bg: #6366f1;
+  --shadow: rgba(0,0,0,.05);
 }
 
-.container {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 2rem;
-  background-color: #ffffff;
-  border-radius: 0.75rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+body.dark {
+  --bg: #121212;
+  --text: #e5e7eb;
+  --card-bg: #1e1e1e;
+  --primary: #6366f1;
+  --header-bg: #4f46e5;
+  --shadow: rgba(0,0,0,.5);
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 1.5rem;
-  color: #111827; /* gray-900 */
-}
+/* ---------- reset/geral ---------- */
+*{box-sizing:border-box;margin:0;padding:0;font-family:Segoe UI,Arial,sans-serif}
+body{background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:2rem;padding:2rem}
 
-#input-section {
-  margin-bottom: 1rem;
+/* ---------- botão modo escuro ---------- */
+.dark-toggle{
+  position:fixed;top:1rem;right:1rem;
+  background:var(--card-bg);border:none;border-radius:50%;
+  width:42px;height:42px;cursor:pointer;font-size:1.1rem;
+  box-shadow:0 2px 6px var(--shadow);transition:transform .3s
 }
+.dark-toggle:hover{transform:scale(1.05)}
 
-input[type="text"] {
-  width: 100%;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #d1d5db; /* gray-300 */
-  border-radius: 0.5rem;
-  font-size: 1rem;
+/* ---------- card ---------- */
+.card{
+  background:var(--card-bg);
+  border-radius:1rem;
+  box-shadow:0 15px 40px var(--shadow);
+  width:300px;
 }
+.card-header{
+  display:flex;align-items:center;gap:.5rem;
+  padding:1rem;border-bottom:1px solid #0001
+}
+.card-header h2{font-size:1.1rem;font-weight:600}
+.icon{font-size:1.3rem;color:var(--primary)}
+.card-body{padding:.5rem 1rem;display:flex;flex-direction:column;gap:.75rem}
 
-button {
-  cursor: pointer;
-  transition: background-color 0.3s;
+/* item do card */
+.item-card{display:flex;align-items:center;justify-content:space-between}
+.item-left{display:flex;align-items:center;gap:.5rem}
+.checkbox{
+  width:20px;height:20px;appearance:none;
+  border:2px solid var(--text);border-radius:4px;cursor:pointer;position:relative
 }
+.checkbox:checked{background:var(--primary);border-color:var(--primary)}
+.checkbox:checked::after{
+  content:'✔';position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-58%);font-size:14px;color:#fff
+}
+.drag-icon{cursor:grab;font-size:1.2rem;color:var(--text);user-select:none}
 
-#tabelaTarefas {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: white;
-  border-radius: 1rem;
-  overflow: hidden;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+/* ---------- container principal ---------- */
+.container{
+  background:var(--card-bg);
+  border-radius:1rem;
+  box-shadow:0 2px 10px var(--shadow);
+  padding:2rem;max-width:1000px;width:100%
 }
+h1{text-align:center;margin-bottom:1.5rem;font-size:2rem}
 
-#tabelaTarefas thead {
-  background-color: #6366f1; /* indigo-500 */
-  color: white;
+/* inputs e botões */
+#input-section label{display:block;margin-bottom:.25rem;font-weight:500}
+#input-section input{
+  width:100%;padding:.5rem .75rem;border:1px solid #d1d5db;border-radius:.5rem;font-size:1rem
 }
+.primary-btn{
+  margin-top:1rem;padding:.6rem 1.2rem;font-weight:600;
+  background:var(--primary);color:#fff;border:none;border-radius:.5rem;cursor:pointer;
+  transition:filter .3s
+}
+.primary-btn:hover{filter:brightness(1.1)}
 
-#tabelaTarefas th,
-#tabelaTarefas td {
-  padding: 1rem;
-  text-align: left;
-}
+/* ---------- tabela ---------- */
+#tabelaTarefas{width:100%;border-collapse:collapse;margin-top:1.5rem;background:var(--card-bg);border-radius:1rem;overflow:hidden;box-shadow:0 0 15px var(--shadow)}
+#tabelaTarefas thead{background:var(--header-bg);color:#fff}
+#tabelaTarefas th,#tabelaTarefas td{padding:1rem;text-align:left}
+#tabelaTarefas tr:not(:last-child){border-bottom:1px solid #e5e7eb}
+#tabelaTarefas tr.completed-task{background:#507ab86b;text-decoration:line-through;color:#6b7280}
+#noTasksMessage{margin-top:1rem;text-align:center;font-style:italic;color:#6b7280}
 
-#tabelaTarefas tr:not(:last-child) {
-  border-bottom: 1px solid #e5e7eb; /* gray-200 */
-}
+/* botões de ação */
+.action-btn{background:none;border:none;padding:.25rem;cursor:pointer}
+.action-btn svg{width:22px;height:22px;fill:var(--text);transition:fill .3s}
+.action-btn:hover svg{fill:var(--primary)}
 
-#tabelaTarefas tr.completed-task td {
-  text-decoration: line-through;
-  color: #6b7280; /* gray-500 */
-}
-
-#noTasksMessage {
-  margin-top: 1rem;
-  font-style: italic;
-  color: #6b7280;
-}
-
-.action-btn {
-  background-color: transparent;
-  border: none;
-  padding: 0.3rem;
-  margin-left: 0.3rem;
-}
-
-.action-btn svg {
-  width: 24px;
-  height: 24px;
-  fill: #4b5563; /* gray-700 */
-  transition: fill 0.3s;
-}
-
-.action-btn:hover svg {
-  fill: #1f2937; /* gray-800 */
-}
-
-.completed-icon svg {
-  width: 16px;
-  height: 16px;
-  fill: #10b981; /* green-500 */
-  margin-right: 0.25rem;
-  vertical-align: middle;
-}
+.completed-icon svg{width:16px;height:16px;fill:#10b981;margin-right:.25rem;vertical-align:middle}

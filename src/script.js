@@ -1,100 +1,113 @@
-class ListetaADS {
+class SchedulerADS {
   constructor() {
-    this.contador = 1
+    this.idAtual = 1
     this.tabelaBody = document.querySelector('#tabelaTarefas tbody')
+    this.listaTarefas = document.getElementById('listaTarefas')
     this.noTasksMessage = document.getElementById('noTasksMessage')
-    this.listaMemorias = document.getElementById('listaMemorias')
-    document.getElementById('adicionarBtn').addEventListener('click', () => this.adicionarTarefa())
-    this.updateNoTasksMessage()
+
+    document.getElementById('adicionarBtn').addEventListener('click', () => this.adicionar())
+    document.getElementById('darkToggle').addEventListener('click', this.toggleDarkMode)
+
+    // carrega preferência de tema
+    if (localStorage.getItem('modo') === 'dark') document.body.classList.add('dark')
+
+    this.atualizarMensagem()
   }
 
-  updateNoTasksMessage() {
-    this.noTasksMessage.style.display = this.tabelaBody.children.length === 0 ? 'block' : 'none'
+  toggleDarkMode() {
+    document.body.classList.toggle('dark')
+    localStorage.setItem('modo', document.body.classList.contains('dark') ? 'dark' : 'light')
   }
 
-  adicionarTarefa() {
+  atualizarMensagem() {
+    this.noTasksMessage.style.display = this.tabelaBody.children.length ? 'none' : 'block'
+  }
+
+  adicionar() {
     const descricaoInput = document.getElementById('descricaoTarefa')
     const descricao = descricaoInput.value.trim()
-    const errorMessage = document.getElementById('errorMessage')
+    const erro = document.getElementById('errorMessage')
 
-    if (descricao === '') {
-      errorMessage.innerText = 'Por favor, insira uma descrição para a memória.'
-      setTimeout(() => errorMessage.innerText = '', 2000)
+    if (!descricao) {
+      erro.textContent = 'Por favor, insira uma descrição.'
+      setTimeout(() => erro.textContent = '', 2000)
       return
     }
 
-    const tr = this.criarLinhaTabela(descricao)
-    const cardItem = this.criarItemCard(descricao)
+    const id = this.idAtual
+    const dataHoje = new Date().toLocaleDateString()
 
+    /* ---- linha da tabela ---- */
+    const tr = document.createElement('tr')
+    tr.id = `task-${id}`
+
+    tr.innerHTML = `
+      <td>${id}</td>
+      <td>${descricao}</td>
+      <td>${dataHoje}</td>
+      <td class="status">Em andamento</td>
+      <td></td>
+    `
+
+    /* botões ação */
+    const concluir = document.createElement('button')
+    concluir.className = 'action-btn'
+    concluir.title = 'Concluir'
+    concluir.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12 3.41 13.41 9 19 21 7 19.59 5.59 9 16.17Z"/></svg>'
+    concluir.addEventListener('click', () => this.marcarConcluida(id, true))
+
+    const excluir = document.createElement('button')
+    excluir.className = 'action-btn'
+    excluir.title = 'Excluir'
+    excluir.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12ZM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4Z"/></svg>'
+    excluir.addEventListener('click', () => this.remover(id))
+
+    tr.lastElementChild.append(concluir, excluir)
     this.tabelaBody.appendChild(tr)
-    this.listaMemorias.appendChild(cardItem)
+
+    /* ---- item no card ---- */
+    const item = document.createElement('div')
+    item.className = 'item-card'
+    item.id = `card-${id}`
+    item.innerHTML = `
+      <div class="item-left">
+        <input type="checkbox" class="checkbox">
+        <p>${descricao}</p>
+      </div>
+      <span class="drag-icon">⋮⋮</span>
+    `
+    const checkbox = item.querySelector('.checkbox')
+    checkbox.addEventListener('change', () => this.marcarConcluida(id, checkbox.checked))
+    this.listaTarefas.appendChild(item)
 
     descricaoInput.value = ''
-    this.contador++
-    this.updateNoTasksMessage()
+    this.idAtual++
+    this.atualizarMensagem()
   }
 
-  criarLinhaTabela(descricao) {
-    const tr = document.createElement('tr')
-    tr.id = `task-${this.contador}`
+  marcarConcluida(id, concluida) {
+    const tr = document.getElementById(`task-${id}`)
+    const statusTd = tr.querySelector('.status')
+    const cardCheckbox = document.querySelector(`#card-${id} .checkbox`)
 
-    const tdContador = document.createElement('td')
-    tdContador.innerText = this.contador
-
-    const tdDescricao = document.createElement('td')
-    tdDescricao.innerText = descricao
-
-    const tdDataInicio = document.createElement('td')
-    tdDataInicio.innerText = new Date().toLocaleDateString()
-
-    const tdDataConclusao = document.createElement('td')
-    tdDataConclusao.innerText = 'Em andamento'
-
-    const tdAcoes = document.createElement('td')
-
-    const botaoConcluir = document.createElement('button')
-    botaoConcluir.className = 'concluirBtn action-btn'
-    botaoConcluir.title = 'Concluir Memória'
-    botaoConcluir.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>'
-    botaoConcluir.addEventListener('click', () => {
-      tdDataConclusao.innerText = new Date().toLocaleDateString()
-      tdDataConclusao.style.color = '#90ee90'
-      botaoConcluir.disabled = true
+    if (concluida) {
+      statusTd.textContent = new Date().toLocaleDateString()
+      statusTd.style.color = '#90ee90'
       tr.classList.add('completed-task')
-      document.querySelector(`#card-${this.contador} input`).checked = true
-    })
-
-    const botaoExcluir = document.createElement('button')
-    botaoExcluir.className = 'excluirBtn action-btn'
-    botaoExcluir.title = 'Excluir Memória'
-    botaoExcluir.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>'
-    botaoExcluir.addEventListener('click', () => {
-      tr.remove()
-      document.querySelector(`#card-${this.contador}`).remove()
-      this.updateNoTasksMessage()
-    })
-
-    tdAcoes.appendChild(botaoConcluir)
-    tdAcoes.appendChild(botaoExcluir)
-
-    tr.append(tdContador, tdDescricao, tdDataInicio, tdDataConclusao, tdAcoes)
-    return tr
+      cardCheckbox.checked = true
+    } else {
+      statusTd.textContent = 'Em andamento'
+      statusTd.style.color = ''
+      tr.classList.remove('completed-task')
+      cardCheckbox.checked = false
+    }
   }
 
-  criarItemCard(descricao) {
-    const item = document.createElement('div')
-    item.className = 'flex items-center justify-between py-3'
-    item.id = `card-${this.contador}`
-
-    item.innerHTML = `
-      <div class="flex items-center gap-2">
-        <input type="checkbox" class="defaultCheckbox h-5 w-5 rounded-md border border-gray-300">
-        <p class="text-base font-bold text-navy-700">${descricao}</p>
-      </div>
-      <span class="material-symbols-rounded h-6 w-6 text-navy-700 cursor-pointer">drag_indicator</span>
-    `
-    return item
+  remover(id) {
+    document.getElementById(`task-${id}`).remove()
+    document.getElementById(`card-${id}`).remove()
+    this.atualizarMensagem()
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => new ListetaADS())
+document.addEventListener('DOMContentLoaded', () => new SchedulerADS())
