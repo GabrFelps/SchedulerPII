@@ -17,11 +17,6 @@ class Task {
     }
   }
 
-  desfazer() {
-    this.dataConclusao = null;
-    this.concluida = false;
-  }
-
   editar(descricao) {
     this.descricao = descricao;
   }
@@ -52,15 +47,23 @@ class SchedulerADS {
     this.noTasksMessage.style.display = this.tabelaBody.children.length ? 'none' : 'block';
   }
 
+  exibirErro(mensagem) {
+    const erro = document.getElementById('errorMessage');
+    erro.style.display = 'block';
+    erro.textContent = mensagem;
+    
+    setTimeout(() => {
+      erro.style.display = 'none';
+    }, 2000);
+  }
+
   adicionar() {
     const descricaoInput = document.getElementById('descricaoTarefa');
     const descricao = descricaoInput.value.trim();
     descricaoInput.value = '';
-    const erro = document.getElementById('errorMessage');
 
     if (!descricao) {
-      erro.textContent = 'Por favor, insira uma descrição.';
-      setTimeout(() => erro.textContent = '', 2000);
+      this.exibirErro('Por favor, insira uma descrição.');
       return;
     }
 
@@ -99,7 +102,13 @@ class SchedulerADS {
     excluir.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12ZM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4Z"/></svg>'
     excluir.addEventListener('click', () => this.remover(tarefa.id))
 
-    tr.lastElementChild.append(concluir, excluir)
+    const editar = document.createElement('button')
+    editar.className = 'action-btn'
+    editar.title = 'Editar'
+    editar.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>'
+    editar.addEventListener('click', () => this.editar(tarefa.id))
+
+    tr.lastElementChild.append(concluir, excluir, editar)
     this.tabelaBody.appendChild(tr)
 
     this.idAtual++
@@ -126,6 +135,11 @@ class SchedulerADS {
   }
 
   remover(id) {
+    const tarefa = this.listaTarefas.find(tarefa => tarefa.id === id)
+    if (tarefa.concluida) {
+      this.exibirErro('Não é possível excluir uma tarefa concluída.')
+      return
+    }
     document.getElementById(`task-${id}`).remove()
     this.atualizarMensagem()
   }

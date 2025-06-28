@@ -95,7 +95,43 @@ h1{text-align:center;margin-bottom:1.5rem;font-size:2rem}
 
 .completed-icon svg{width:16px;height:16px;fill:#10b981;margin-right:.25rem;vertical-align:middle}
 
-.error-message{color:red;font-size:1.25rem;margin-top:0.25rem}
+#errorMessage {
+  display: none;
+  background: #ff5555;
+  border-radius:1rem;
+  padding:1.25rem;
+  color:white;
+  font-size:1.25rem;
+  margin-top:1rem;
+  text-align:center;
+  font-weight:bold;
+  animation: fadeIn 0.5s, fadeOut 1.8s ease-in-out 0.5s forwards;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  text-transform: uppercase;
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    background: #ff5555;
+  }
+  to { 
+    opacity: 1; 
+    background: #ff0000;
+  }
+}
+
+@keyframes fadeOut {
+  from { 
+    opacity: 1; 
+    background: #ff0000;
+  }
+  to { 
+    opacity: 0; 
+    background: #ff5555;
+  }
+}
 
 /* botões de ação da tabela */
 .action-btn {
@@ -127,4 +163,9 @@ h1{text-align:center;margin-bottom:1.5rem;font-size:2rem}
 /* Estilo específico para botão de excluir */
 .action-btn[title="Excluir"]:hover svg {
   fill: #ef4444;
+}
+
+/* Estilo específico para botão de editar */
+.action-btn[title="Editar"]:hover svg {
+  fill: #f59e0b;
 }
