@@ -85,7 +85,7 @@ h1{text-align:center;margin-bottom:1.5rem;font-size:2rem}
 #tabelaTarefas thead{background:var(--header-bg);color:#fff}
 #tabelaTarefas th,#tabelaTarefas td{padding:1rem;text-align:left}
 #tabelaTarefas tr:not(:last-child){border-bottom:1px solid #e5e7eb}
-#tabelaTarefas tr.completed-task{background:#507ab86b;text-decoration:line-through;color:#6b7280}
+#tabelaTarefas tr.completed-task{background:#48964e6b;color:#6b7280}
 #noTasksMessage{margin-top:1rem;text-align:center;font-style:italic;color:#6b7280}
 
 /* botões de ação */
