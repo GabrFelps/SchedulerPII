@@ -1,9 +1,32 @@
+class Task {
+  constructor(id, descricao, concluida) {
+    this.id = id;
+    this.descricao = descricao;
+    this.dataInicio = new Date().toLocaleDateString();
+    this.dataConclusao = null;
+    this.concluida = false;
+  }
+
+  concluir() {
+    this.dataConclusao = new Date().toLocaleDateString();
+    this.concluida = true;
+  }
+
+  desfazer() {
+    this.dataConclusao = null;
+    this.concluida = false;
+  }
+
+  editar(descricao) {
+    this.descricao = descricao;
+  }
+}
+
 class SchedulerADS {
   constructor() {
-    this.idAtual = 1
-    this.tabelaBody = document.querySelector('#tabelaTarefas tbody')
-    this.listaTarefas = document.getElementById('listaTarefas')
-    this.noTasksMessage = document.getElementById('noTasksMessage')
+    this.idAtual = 1;
+    this.tabelaBody = document.querySelector('#tabelaTarefas tbody');
+    this.noTasksMessage = document.getElementById('noTasksMessage');
 
     document.getElementById('adicionarBtn').addEventListener('click', () => this.adicionar())
     document.getElementById('darkToggle').addEventListener('click', this.toggleDarkMode)
@@ -15,27 +38,27 @@ class SchedulerADS {
   }
 
   toggleDarkMode() {
-    document.body.classList.toggle('dark')
-    localStorage.setItem('modo', document.body.classList.contains('dark') ? 'dark' : 'light')
+    document.body.classList.toggle('dark');
+    localStorage.setItem('modo', document.body.classList.contains('dark') ? 'dark' : 'light');
   }
 
   atualizarMensagem() {
-    this.noTasksMessage.style.display = this.tabelaBody.children.length ? 'none' : 'block'
+    this.noTasksMessage.style.display = this.tabelaBody.children.length ? 'none' : 'block';
   }
 
   adicionar() {
-    const descricaoInput = document.getElementById('descricaoTarefa')
-    const descricao = descricaoInput.value.trim()
-    const erro = document.getElementById('errorMessage')
+    const descricaoInput = document.getElementById('descricaoTarefa');
+    const descricao = descricaoInput.value.trim();
+    const erro = document.getElementById('errorMessage');
 
     if (!descricao) {
-      erro.textContent = 'Por favor, insira uma descrição.'
-      setTimeout(() => erro.textContent = '', 2000)
-      return
+      erro.textContent = 'Por favor, insira uma descrição.';
+      setTimeout(() => erro.textContent = '', 2000);
+      return;
     }
 
-    const id = this.idAtual
-    const dataHoje = new Date().toLocaleDateString()
+    const id = this.idAtual;
+    const dataHoje = new Date().toLocaleDateString();
 
     /* ---- linha da tabela ---- */
     const tr = document.createElement('tr')
@@ -65,47 +88,29 @@ class SchedulerADS {
     tr.lastElementChild.append(concluir, excluir)
     this.tabelaBody.appendChild(tr)
 
-    /* ---- item no card ---- */
-    const item = document.createElement('div')
-    item.className = 'item-card'
-    item.id = `card-${id}`
-    item.innerHTML = `
-      <div class="item-left">
-        <input type="checkbox" class="checkbox">
-        <p>${descricao}</p>
-      </div>
-      <span class="drag-icon">⋮⋮</span>
-    `
-    const checkbox = item.querySelector('.checkbox')
-    checkbox.addEventListener('change', () => this.marcarConcluida(id, checkbox.checked))
-    this.listaTarefas.appendChild(item)
-
     descricaoInput.value = ''
     this.idAtual++
     this.atualizarMensagem()
   }
 
+
   marcarConcluida(id, concluida) {
     const tr = document.getElementById(`task-${id}`)
     const statusTd = tr.querySelector('.status')
-    const cardCheckbox = document.querySelector(`#card-${id} .checkbox`)
 
     if (concluida) {
       statusTd.textContent = new Date().toLocaleDateString()
       statusTd.style.color = '#90ee90'
       tr.classList.add('completed-task')
-      cardCheckbox.checked = true
     } else {
       statusTd.textContent = 'Em andamento'
       statusTd.style.color = ''
       tr.classList.remove('completed-task')
-      cardCheckbox.checked = false
     }
   }
 
   remover(id) {
     document.getElementById(`task-${id}`).remove()
-    document.getElementById(`card-${id}`).remove()
     this.atualizarMensagem()
   }
 }

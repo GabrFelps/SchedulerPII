@@ -94,3 +94,37 @@ h1{text-align:center;margin-bottom:1.5rem;font-size:2rem}
 .action-btn:hover svg{fill:var(--primary)}
 
 .completed-icon svg{width:16px;height:16px;fill:#10b981;margin-right:.25rem;vertical-align:middle}
+
+.error-message{color:red;font-size:1.25rem;margin-top:0.25rem}
+
+/* botões de ação da tabela */
+.action-btn {
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  margin-right: 0.25rem;
+  transition: all 0.3s;
+}
+
+.action-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--text);
+  transition: fill 0.3s;
+}
+
+.action-btn:hover svg {
+  fill: var(--primary);
+}
+
+/* Estilo específico para botão de concluir */
+.action-btn[title="Concluir"]:hover svg {
+  fill: #10b981;
+}
+
+/* Estilo específico para botão de excluir */
+.action-btn[title="Excluir"]:hover svg {
+  fill: #ef4444;
+}
