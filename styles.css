@@ -179,19 +179,24 @@ h1 {
 }
 
 /* ---------- tabela ---------- */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
 #tabelaTarefas {
-  width:100%;
-  border-collapse:collapse;
-  margin-top:1.5rem;
-  background:var(--card-bg);
-  border-radius:1rem;
-  overflow:hidden;
-  box-shadow:0 0 15px var(--shadow)
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  background: var(--card-bg);
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 0 15px var(--shadow);
+  max-width: 100%;
 }
 
 #tabelaTarefas thead {
-  background:var(--header-bg);
-  color:#fff
+  background: var(--header-bg);
+  color: #fff;
 }
 
 #tabelaTarefas th,#tabelaTarefas td {
