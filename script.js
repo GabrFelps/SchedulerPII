@@ -35,6 +35,9 @@ class SchedulerADS {
     // Adicionar tarefas
     document.getElementById('adicionarBtn').addEventListener('click', () => this.adicionar())
 
+    // Remover todas tarefas
+    document.getElementById('removerTodasBtn').addEventListener('click', () => this.removerTodas());
+
     // Adicionar evento de clique no botão de dark mode
     document.getElementById('darkToggle').addEventListener('click', this.toggleDarkMode)
 
@@ -157,6 +160,37 @@ class SchedulerADS {
       return
     }
     this.mostrarModalExclusao(id)
+  }
+
+  removerTodas() {
+    this.fecharModal(); // Fecha qualquer modal aberto
+
+    if (this.listaTarefas.length === 0) {	
+      this.exibirErro('Não há tarefas para remover.')
+      return;
+    }
+
+    // Exibe uma janela de confirmação antes de remover todas as tarefas
+    const modal = document.createElement('div');
+    modal.id = 'removeAllConfirmModal';
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+      <div class="modal-box">
+        <p id="removeAllConfirmText">Tem certeza que deseja remover todas as tarefas?</p>
+        <button id="confirmRemoveAllBtn" class="primary-btn">Sim, remover todas</button>
+        <button id="cancelRemoveAllBtn" class="primary-btn cancel-btn">Cancelar</button>
+      </div>
+    `;
+
+    // Adiciona esse modal à janela
+    this.modalContainer.appendChild(modal);
+    modal.style.display = 'flex'; // Faz ele aparecer
+    document.getElementById('confirmRemoveAllBtn').onclick = () => {
+      this.tabelaBody.innerHTML = ''; // Limpa a tabela
+      this.listaTarefas = []; // Limpa a lista de tarefas
+      this.atualizarMensagem(); // Atualiza a mensagem de tarefas
+      this.fecharModal(); // Fecha o modal
+    };
   }
 
   // Mostra a janela de confirmação de exclusão de tarefa
